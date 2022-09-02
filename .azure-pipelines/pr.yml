@@ -1,0 +1,38 @@
+trigger: none
+
+pr:
+- main
+- public/*
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Debug'
+  buildPlatform: 'x64'
+  NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
+  VCPKG_BINARY_SOURCES: 'clear;nuget,https://pkgs.dev.azure.com/zhangshuai89/4debf70e-9948-4d59-9745-b27035b12245/_packaging/GitStatusCache/nuget/v3/index.json,readwrite'
+
+steps:
+- checkout: self
+  clean: true
+  submodules: true
+
+- task: NuGetAuthenticate@1
+
+- powershell: |
+    cd vcpkg
+    ./bootstrap-vcpkg.bat
+    cd ..
+
+- task: MSBuild@1
+  displayName: 'Build projects'
+  inputs:
+    solution: 'dirs.proj'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish artifacts'
+  inputs:
+    targetPath: $(System.DefaultWorkingDirectory)/artifacts

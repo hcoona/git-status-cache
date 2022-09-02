@@ -28,5 +28,9 @@
     <VcpkgManifestInstall>true</VcpkgManifestInstall>
   </PropertyGroup>
 
+  <PropertyGroup Label="Artifacts">
+    <BaseArtifactsPath>$(EnlistmentRoot)\artifacts</BaseArtifactsPath>
+  </PropertyGroup>
+
   <Import Project="$(VcpkgRoot)\scripts\buildsystems\msbuild\vcpkg.props" />
 </Project>
