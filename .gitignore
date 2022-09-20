@@ -503,3 +503,6 @@ FodyWeavers.xsd
 
 # build artifact.
 /artifacts
+
+# generated sln files.
+*.sln
