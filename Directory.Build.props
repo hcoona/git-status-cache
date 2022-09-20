@@ -26,6 +26,17 @@
     <VCPkgLocalAppDataDisabled>false</VCPkgLocalAppDataDisabled>
     <VcpkgEnableManifest>true</VcpkgEnableManifest>
     <VcpkgManifestInstall>true</VcpkgManifestInstall>
+    <!--
+      Do remember to grant your build server contributor role for feeds.
+      https://stackoverflow.com/questions/58780741/azure-devops-user-lacks-permission-to-complete-this-action-you-need-to-have-a
+    -->
+    <_VcpkgBinaryCacheNugetFeed>https://pkgs.dev.azure.com/zhangshuai89/4debf70e-9948-4d59-9745-b27035b12245/_packaging/GitStatusCache/nuget/v3/index.json</_VcpkgBinaryCacheNugetFeed>
+    <VcpkgAdditionalInstallOptions Condition="'$(ContinuousIntegrationBuild)' == 'true'">$(VcpkgAdditionalInstallOptions) --binarysource "clear;nuget,$(_VcpkgBinaryCacheNugetFeed),readwrite"</VcpkgAdditionalInstallOptions>
+    <VcpkgAdditionalInstallOptions Condition="'$(ContinuousIntegrationBuild)' != 'true'">$(VcpkgAdditionalInstallOptions) --binarysource "clear;nuget,$(_VcpkgBinaryCacheNugetFeed),read"</VcpkgAdditionalInstallOptions>
+    <!--
+      Use internal build recipes via overlay port
+      https://devblogs.microsoft.com/cppblog/registries-bring-your-own-libraries-to-vcpkg/
+    -->
   </PropertyGroup>
 
   <PropertyGroup Label="Artifacts">
